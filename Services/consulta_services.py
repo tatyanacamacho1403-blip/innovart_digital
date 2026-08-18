@@ -7,11 +7,9 @@ from Models.consulta import Consulta
 def servListConsulta():
     sql = "SELECT * FROM T_CONSULTA"
 
-    # la siguiente linea es para ejecutar la consulta sql
     c = current_app.mysql.connection.cursor()
     c.execute(sql)
 
-    # la siguiente linea es para obtener los resultados de la consulta sql
     data = c.fetchall()
 
     consultas_l = []
@@ -19,7 +17,6 @@ def servListConsulta():
     for u in data:
         consultas_l.append(Consulta(u[0], u[1], u[2], u[3], u[4]).to_dic())
 
-    # la siguiente linea es para cerrar la conexion a la base de datos
     c.close()
 
     return consultas_l
