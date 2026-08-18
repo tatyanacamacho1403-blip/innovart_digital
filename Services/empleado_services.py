@@ -7,11 +7,9 @@ from Models.empleado import Empleado
 def servListEmpleado():
     sql = "SELECT * FROM T_EMPLEADO"
 
-    # la siguiente linea es para ejecutar la consulta sql
     c = current_app.mysql.connection.cursor()
     c.execute(sql)
 
-    # la siguiente linea es para obtener los resultados de la consulta sql
     data = c.fetchall()
 
     empleados_l = []
@@ -19,7 +17,6 @@ def servListEmpleado():
     for u in data:
         empleados_l.append(Empleado(u[0], u[1]).to_dic())
 
-    # la siguiente linea es para cerrar la conexion a la base de datos
     c.close()
 
     return empleados_l
