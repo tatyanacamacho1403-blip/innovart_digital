@@ -7,11 +7,9 @@ from Models.usuario import Usuario
 def servListUsuario():
     sql = "SELECT * FROM T_USUARIO"
 
-    # la siguiente linea es para ejecutar la consulta sql
     c = current_app.mysql.connection.cursor()
     c.execute(sql)
 
-    # la siguiente linea es para obtener los resultados de la consulta sql
     data = c.fetchall()
 
     usuarios_l = []
@@ -19,7 +17,6 @@ def servListUsuario():
     for u in data:
         usuarios_l.append(Usuario(u[0], u[1], u[2], u[3]).to_dic())
 
-    # la siguiente linea es para cerrar la conexion a la base de datos
     c.close()
 
     return usuarios_l
