@@ -7,11 +7,9 @@ from Models.servicio import Servicio
 def servListServicio():
     sql = "SELECT * FROM T_SERVICIO"
 
-    # la siguiente linea es para ejecutar la consulta sql
     c = current_app.mysql.connection.cursor()
     c.execute(sql)
 
-    # la siguiente linea es para obtener los resultados de la consulta sql
     data = c.fetchall()
 
     servicios_l = []
@@ -19,7 +17,6 @@ def servListServicio():
     for u in data:
         servicios_l.append(Servicio(u[0], u[1], u[2], u[3], u[4], u[5], u[6]).to_dic())
 
-    # la siguiente linea es para cerrar la conexion a la base de datos
     c.close()
 
     return servicios_l
