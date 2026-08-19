@@ -1,11 +1,5 @@
 from flask import request, jsonify
-from Services.consulta_services import (
-    servListConsulta,
-    servGetConsulta,
-    addConsulta,
-    upConsulta,
-    delConsulta,
-)
+from Services.consulta_services import (servListConsulta, servGetConsulta, addConsulta, upConsulta, delConsulta,)
 
 def cntListConsulta():
     return jsonify(servListConsulta()), 200
