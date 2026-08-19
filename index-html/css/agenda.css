@@ -1,0 +1,132 @@
+/* =========================
+   AGENDA
+========================= */
+
+.agenda-page {
+    min-height: calc(100vh - 75px);
+
+    padding: 70px 8%;
+
+    background: #f5f5fc;
+}
+
+
+/* CONTENEDOR */
+
+.agenda-container {
+    max-width: 800px;
+
+    margin: 0 auto;
+
+    background: white;
+
+    padding: 40px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.07);
+}
+
+.agenda-container h1 {
+    text-align: center;
+
+    margin-bottom: 10px;
+}
+
+.agenda-container .subtitle {
+    text-align: center;
+
+    color: #666;
+
+    margin-bottom: 30px;
+}
+
+
+/* FORMULARIO */
+
+.agenda-form {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+}
+
+.agenda-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.agenda-group.full {
+    grid-column: 1 / -1;
+}
+
+.agenda-group label {
+    font-size: 14px;
+
+    font-weight: bold;
+}
+
+.agenda-group input,
+.agenda-group select,
+.agenda-group textarea {
+    padding: 13px;
+
+    border: 1px solid #dcdfea;
+
+    border-radius: 6px;
+
+    outline: none;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.agenda-group input:focus,
+.agenda-group select:focus,
+.agenda-group textarea:focus {
+    border-color: #7655ff;
+}
+
+.agenda-group textarea {
+    min-height: 120px;
+
+    resize: vertical;
+}
+
+
+/* BOTÓN */
+
+.agenda-form .btn-primary {
+    grid-column: 1 / -1;
+
+    border: none;
+
+    cursor: pointer;
+
+    text-align: center;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 650px) {
+
+    .agenda-form {
+        grid-template-columns: 1fr;
+    }
+
+    .agenda-group.full {
+        grid-column: auto;
+    }
+
+    .agenda-form .btn-primary {
+        grid-column: auto;
+    }
+
+    .agenda-container {
+        padding: 25px;
+    }
+}

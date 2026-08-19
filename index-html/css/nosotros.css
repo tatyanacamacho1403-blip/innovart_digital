@@ -1,0 +1,214 @@
+/* =========================
+   NOSOTROS
+========================= */
+
+.about-page {
+    min-height: calc(100vh - 75px);
+
+    background: white;
+}
+
+
+/* HERO NOSOTROS */
+
+.about-hero {
+    background: #061535;
+
+    color: white;
+
+    padding: 70px 8%;
+
+    text-align: center;
+}
+
+.about-hero h1 {
+    font-size: 40px;
+
+    margin-bottom: 15px;
+}
+
+.about-hero h1 span {
+    color: #8065ff;
+}
+
+.about-hero p {
+    max-width: 750px;
+
+    margin: auto;
+
+    color: #d6d9e5;
+
+    line-height: 1.7;
+}
+
+
+/* INFORMACIÓN */
+
+.about-content {
+    padding: 70px 8%;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 50px;
+
+    align-items: center;
+}
+
+.about-text h2 {
+    font-size: 30px;
+
+    margin-bottom: 20px;
+}
+
+.about-text p {
+    color: #606575;
+
+    line-height: 1.7;
+
+    margin-bottom: 15px;
+}
+
+
+/* IMAGEN */
+
+.about-image {
+    min-height: 300px;
+
+    background: #eef0f8;
+
+    border-radius: 15px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 100px;
+}
+
+
+/* MISIÓN Y VISIÓN */
+
+.mission-vision {
+    background: #f5f5fc;
+
+    padding: 65px 8%;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 25px;
+}
+
+.mission-card,
+.vision-card {
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 10px;
+
+    border: 1px solid #e1e3eb;
+}
+
+.mission-card h3,
+.vision-card h3 {
+    color: #6545ed;
+
+    margin-bottom: 15px;
+}
+
+.mission-card p,
+.vision-card p {
+    color: #606575;
+
+    line-height: 1.6;
+}
+
+
+/* POR QUÉ ELEGIRNOS */
+
+.why {
+    padding: 65px 8%;
+
+    display: flex;
+
+    gap: 50px;
+
+    align-items: center;
+}
+
+.why-text {
+    width: 50%;
+}
+
+.why-text h2 {
+    font-size: 30px;
+
+    margin-bottom: 25px;
+}
+
+.why-list {
+    list-style: none;
+}
+
+.why-list li {
+    margin-bottom: 17px;
+
+    font-size: 15px;
+}
+
+.why-list li::before {
+    content: "✓";
+
+    color: #6545ed;
+
+    font-weight: bold;
+
+    margin-right: 10px;
+}
+
+.why-image {
+    width: 50%;
+
+    height: 280px;
+
+    background: #eef0f8;
+
+    border-radius: 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 100px;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 800px) {
+
+    .about-content {
+        grid-template-columns: 1fr;
+    }
+
+    .mission-vision {
+        grid-template-columns: 1fr;
+    }
+
+    .why {
+        flex-direction: column;
+    }
+
+    .why-text,
+    .why-image {
+        width: 100%;
+    }
+}

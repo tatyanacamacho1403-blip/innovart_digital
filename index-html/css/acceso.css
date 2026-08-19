@@ -1,0 +1,137 @@
+/* =========================
+   LOGIN
+========================= */
+
+.login-page {
+    min-height: calc(100vh - 75px);
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    background: #f5f5fc;
+
+    padding: 40px 20px;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 430px;
+
+    background: white;
+
+    padding: 40px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+}
+
+.login-container h1 {
+    text-align: center;
+
+    color: #17203a;
+
+    margin-bottom: 10px;
+}
+
+.login-container .subtitle {
+    text-align: center;
+
+    color: #666;
+
+    font-size: 14px;
+
+    margin-bottom: 30px;
+}
+
+
+/* FORMULARIO */
+
+.login-form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.form-group label {
+    font-size: 14px;
+
+    font-weight: bold;
+
+    color: #17203a;
+}
+
+.form-group input {
+    padding: 13px;
+
+    border: 1px solid #dcdfea;
+
+    border-radius: 6px;
+
+    outline: none;
+
+    font-size: 14px;
+}
+
+.form-group input:focus {
+    border-color: #7655ff;
+}
+
+
+/* OPCIONES */
+
+.login-options {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    font-size: 13px;
+}
+
+.login-options a {
+    color: #6545ed;
+}
+
+
+/* BOTÓN */
+
+.login-form .btn-primary {
+    border: none;
+
+    cursor: pointer;
+
+    width: 100%;
+}
+
+
+/* REGISTRO */
+
+.login-register {
+    text-align: center;
+
+    margin-top: 25px;
+
+    font-size: 14px;
+
+    color: #666;
+}
+
+.login-register a {
+    color: #6545ed;
+
+    font-weight: bold;
+}

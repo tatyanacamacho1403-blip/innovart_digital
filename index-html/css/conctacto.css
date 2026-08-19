@@ -1,0 +1,151 @@
+/* =========================
+   CONTACTO
+========================= */
+
+.contact-page {
+    min-height: calc(100vh - 75px);
+
+    padding: 70px 8%;
+
+    background: #f5f5fc;
+}
+
+
+/* CONTENEDOR */
+
+.contact-container {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 40px;
+
+    max-width: 1100px;
+
+    margin: auto;
+}
+
+
+/* INFORMACIÓN */
+
+.contact-info {
+    background: #061535;
+
+    color: white;
+
+    padding: 40px;
+
+    border-radius: 12px;
+}
+
+.contact-info h2 {
+    margin-bottom: 15px;
+}
+
+.contact-info > p {
+    color: #d6d9e5;
+
+    line-height: 1.6;
+
+    margin-bottom: 30px;
+}
+
+.contact-item {
+    display: flex;
+
+    gap: 15px;
+
+    margin-bottom: 22px;
+
+    align-items: center;
+}
+
+.contact-icon {
+    width: 42px;
+    height: 42px;
+
+    background: #6545ed;
+
+    border-radius: 8px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* FORMULARIO */
+
+.contact-form {
+    background: white;
+
+    padding: 40px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.06);
+}
+
+.contact-form h2 {
+    margin-bottom: 25px;
+}
+
+.contact-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    margin-bottom: 18px;
+}
+
+.contact-group label {
+    font-size: 14px;
+
+    font-weight: bold;
+}
+
+.contact-group input,
+.contact-group textarea {
+    padding: 13px;
+
+    border: 1px solid #dcdfea;
+
+    border-radius: 6px;
+
+    outline: none;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.contact-group input:focus,
+.contact-group textarea:focus {
+    border-color: #7655ff;
+}
+
+.contact-group textarea {
+    min-height: 130px;
+
+    resize: vertical;
+}
+
+.contact-form .btn-primary {
+    border: none;
+
+    cursor: pointer;
+
+    width: 100%;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 800px) {
+
+    .contact-container {
+        grid-template-columns: 1fr;
+    }
+}
