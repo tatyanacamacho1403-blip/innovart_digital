@@ -4,16 +4,15 @@ from Services.agenda_services import (
     servGetAgenda,
     addAgenda,
     upAgenda,
-    delAgenda,
-    searchByUuidAgenda
+    delAgenda
 )
 
 
-def listAgenda():
+def cntListAgenda():
     return jsonify(servListAgenda()), 200
 
 
-def getAgenda(id):
+def cntGetAgenda(id):
     data = servGetAgenda(id)
 
     if data is None:
@@ -22,7 +21,7 @@ def getAgenda(id):
     return jsonify(data), 200
 
 
-def createAgenda():
+def cntCreateAgenda():
     data = request.get_json(silent=True)
 
     if data is None:
@@ -32,7 +31,7 @@ def createAgenda():
     return jsonify(data), 201
 
 
-def updateAgenda(id):
+def cntUpdateAgenda(id):
     data = request.get_json(silent=True)
 
     if data is None:
@@ -46,17 +45,8 @@ def updateAgenda(id):
     return jsonify(data), 200
 
 
-def deleteAgenda(id):
+def cntDeleteAgenda(id):
     if not delAgenda(id):
         return jsonify({"error": "agenda no encontrado"}), 404
 
     return jsonify({"message": "agenda eliminado correctamente"}), 200
-
-
-def searchUuidAgenda(uuid):
-    data = searchByUuidAgenda(uuid)
-
-    if data is None:
-        return jsonify({"error": "agenda no encontrado"}), 404
-
-    return jsonify(data), 200
