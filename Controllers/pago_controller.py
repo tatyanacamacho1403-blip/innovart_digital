@@ -1,11 +1,5 @@
 from flask import request, jsonify
-from Services.pago_services import (
-    servListPago,
-    servGetPago,
-    addPago,
-    upPago,
-    delPago
-)
+from Services.pago_services import (servListPago, servGetPago, addPago, upPago, delPago)
 
 
 def cntListPago():
