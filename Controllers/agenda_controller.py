@@ -1,11 +1,5 @@
 from flask import request, jsonify
-from Services.agenda_services import (
-    servListAgenda,
-    servGetAgenda,
-    addAgenda,
-    upAgenda,
-    delAgenda
-)
+from Services.agenda_services import (servListAgenda, servGetAgenda, addAgenda, upAgenda, delAgenda)
 
 
 def cntListAgenda():
