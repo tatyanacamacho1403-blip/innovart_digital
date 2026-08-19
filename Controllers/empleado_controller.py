@@ -1,11 +1,5 @@
 from flask import request, jsonify
-from Services.empleado_services import (
-    servListEmpleado,
-    servGetEmpleado,
-    addEmpleado,
-    upEmpleado,
-    delEmpleado,
-)
+from Services.empleado_services import (servListEmpleado, servGetEmpleado, addEmpleado, upEmpleado, delEmpleado,)
 
 
 def cntListEmpleado():
