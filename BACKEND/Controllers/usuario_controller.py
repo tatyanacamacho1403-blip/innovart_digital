@@ -7,46 +7,47 @@ from Services.usuario_services import (
     delUsuario
 )
 
-
-def cntListUsuario():
-    return jsonify(servListUsuario()), 200
-
-
-def cntGetUsuario(id):
-    data = servGetUsuario(id)
-
-    if data is None:
-        return jsonify({"error": "usuario no encontrado"}), 404
-
-    return jsonify(data), 200
+class usuario:
+    def cntListUsuario():
+        return jsonify(servListUsuario()), 200
 
 
-def cntCreateUsuario():
-    data = request.get_json(silent=True)
+    def cntGetUsuario(id):
+        data = servGetUsuario(id)
 
-    if data is None:
-        return jsonify({"error": "Debe enviar un JSON"}), 400
+        if data is None:
+            return jsonify({"error": "usuario no encontrado"}), 404
 
-    result = addUsuario(data)
-    return jsonify(result), 201
-
-
-def cntUpdateUsuario(id):
-    data = request.get_json(silent=True)
-
-    if data is None:
-        return jsonify({"error": "Debe enviar un JSON"}), 400
-
-    result = upUsuario(id, data)
-
-    if result is None:
-        return jsonify({"error": "usuario no encontrado"}), 404
-
-    return jsonify(result), 200
+        return jsonify(data), 200
 
 
-def cntDeleteUsuario(id):
-    if not delUsuario(id):
-        return jsonify({"error": "usuario no encontrado"}), 404
+    def cntCreateUsuario():
+        data = request.get_json(silent=True)
 
-    return jsonify({"message": "usuario eliminado correctamente"}), 200
+        if data is None:
+            return jsonify({"error": "Debe enviar un JSON"}), 400
+
+        result = addUsuario(data)
+        return jsonify(result), 201
+
+
+    def cntUpdateUsuario(id):
+        data = request.get_json(silent=True)
+
+        if data is None:
+            return jsonify({"error": "Debe enviar un JSON"}), 400
+
+        result = upUsuario(id, data)
+
+        if result is None:
+            return jsonify({"error": "usuario no encontrado"}), 404
+
+        return jsonify(result), 200
+
+
+    def cntDeleteUsuario(id):
+        if not delUsuario(id):
+            return jsonify({"error": "usuario no encontrado"}), 404
+
+        return jsonify({"message": "usuario eliminado correctamente"}), 200
+
