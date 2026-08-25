@@ -7,46 +7,47 @@ from Services.servicio_services import (
     delServicio
 )
 
-
-def cntListServicio():
-    return jsonify(servListServicio()), 200
-
-
-def cntGetServicio(id):
-    data = servGetServicio(id)
-
-    if data is None:
-        return jsonify({"error": "servicio no encontrado"}), 404
-
-    return jsonify(data), 200
+class servicio:
+    def cntListServicio():
+        return jsonify(servListServicio()), 200
 
 
-def cntCreateServicio():
-    data = request.get_json(silent=True)
+    def cntGetServicio(id):
+        data = servGetServicio(id)
 
-    if data is None:
-        return jsonify({"error": "Debe enviar un JSON"}), 400
+        if data is None:
+            return jsonify({"error": "servicio no encontrado"}), 404
 
-    result = addServicio(data)
-    return jsonify(result), 201
-
-
-def cntUpdateServicio(id):
-    data = request.get_json(silent=True)
-
-    if data is None:
-        return jsonify({"error": "Debe enviar un JSON"}), 400
-
-    result = upServicio(id, data)
-
-    if result is None:
-        return jsonify({"error": "servicio no encontrado"}), 404
-
-    return jsonify(result), 200
+        return jsonify(data), 200
 
 
-def cntDeleteServicio(id):
-    if not delServicio(id):
-        return jsonify({"error": "servicio no encontrado"}), 404
+    def cntCreateServicio():
+        data = request.get_json(silent=True)
 
-    return jsonify({"message": "servicio eliminado correctamente"}), 200
+        if data is None:
+            return jsonify({"error": "Debe enviar un JSON"}), 400
+
+        result = addServicio(data)
+        return jsonify(result), 201
+
+
+    def cntUpdateServicio(id):
+        data = request.get_json(silent=True)
+
+        if data is None:
+            return jsonify({"error": "Debe enviar un JSON"}), 400
+
+        result = upServicio(id, data)
+
+        if result is None:
+            return jsonify({"error": "servicio no encontrado"}), 404
+
+        return jsonify(result), 200
+
+
+    def cntDeleteServicio(id):
+        if not delServicio(id):
+            return jsonify({"error": "servicio no encontrado"}), 404
+
+        return jsonify({"message": "servicio eliminado correctamente"}), 200
+
