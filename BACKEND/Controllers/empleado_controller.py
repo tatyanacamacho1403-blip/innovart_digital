@@ -7,46 +7,47 @@ from Services.empleado_services import (
     delEmpleado
 )
 
-
-def cntListEmpleado():
-    return jsonify(servListEmpleado()), 200
-
-
-def cntGetEmpleado(id):
-    data = servGetEmpleado(id)
-
-    if data is None:
-        return jsonify({"error": "empleado no encontrado"}), 404
-
-    return jsonify(data), 200
+class empleado:
+    def cntListEmpleado():
+        return jsonify(servListEmpleado()), 200
 
 
-def cntCreateEmpleado():
-    data = request.get_json(silent=True)
+    def cntGetEmpleado(id):
+        data = servGetEmpleado(id)
 
-    if data is None:
-        return jsonify({"error": "Debe enviar un JSON"}), 400
+        if data is None:
+            return jsonify({"error": "empleado no encontrado"}), 404
 
-    result = addEmpleado(data)
-    return jsonify(result), 201
-
-
-def cntUpdateEmpleado(id):
-    data = request.get_json(silent=True)
-
-    if data is None:
-        return jsonify({"error": "Debe enviar un JSON"}), 400
-
-    result = upEmpleado(id, data)
-
-    if result is None:
-        return jsonify({"error": "empleado no encontrado"}), 404
-
-    return jsonify(result), 200
+        return jsonify(data), 200
 
 
-def cntDeleteEmpleado(id):
-    if not delEmpleado(id):
-        return jsonify({"error": "empleado no encontrado"}), 404
+    def cntCreateEmpleado():
+        data = request.get_json(silent=True)
 
-    return jsonify({"message": "empleado eliminado correctamente"}), 200
+        if data is None:
+            return jsonify({"error": "Debe enviar un JSON"}), 400
+
+        result = addEmpleado(data)
+        return jsonify(result), 201
+
+
+    def cntUpdateEmpleado(id):
+        data = request.get_json(silent=True)
+
+        if data is None:
+            return jsonify({"error": "Debe enviar un JSON"}), 400
+
+        result = upEmpleado(id, data)
+
+        if result is None:
+            return jsonify({"error": "empleado no encontrado"}), 404
+
+        return jsonify(result), 200
+
+
+    def cntDeleteEmpleado(id):
+        if not delEmpleado(id):
+            return jsonify({"error": "empleado no encontrado"}), 404
+
+        return jsonify({"message": "empleado eliminado correctamente"}), 200
+
