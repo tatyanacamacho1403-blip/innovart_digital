@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_mysqldb import MySQL
 from flask_cors import CORS
+from routes.__init__ import load_routes
 
 from config import Config
 from Routes import load_routes
