@@ -1,46 +1,52 @@
 from flask import request, jsonify
-from Services.agenda_services import agenda
+from Services.agenda_services import (
+    servListAgenda,
+    servGetAgenda,
+    addAgenda,
+    upAgenda,
+    delAgenda
+)
+
+class agenda:
+    def cntListAgenda():
+        return jsonify(servListAgenda()), 200
 
 
-def cntListAgenda():
-    return jsonify(servListAgenda()), 200
+    def cntGetAgenda(id):
+        data = servGetAgenda(id)
+
+        if data is None:
+            return jsonify({"error": "agenda no encontrado"}), 404
+
+        return jsonify(data), 200
+
+    
+    def cntCreateAgenda():
+        data = request.get_json(silent=True)
+
+        if data is None:
+            return jsonify({"error": "Debe enviar un JSON"}), 400
+
+        result = addAgenda(data)
+        return jsonify(result), 201
 
 
-def cntGetAgenda(id):
-    data = servGetAgenda(id)
+    def cntUpdateAgenda(id):
+        data = request.get_json(silent=True)
 
-    if data is None:
-        return jsonify({"error": "agenda no encontrado"}), 404
+        if data is None:
+            return jsonify({"error": "Debe enviar un JSON"}), 400
 
-    return jsonify(data), 200
+        result = upAgenda(id, data)
 
+        if result is None:
+            return jsonify({"error": "agenda no encontrado"}), 404
 
-def cntCreateAgenda():
-    data = request.get_json(silent=True)
-
-    if data is None:
-        return jsonify({"error": "Debe enviar un JSON"}), 400
-
-    result = addAgenda(data)
-    return jsonify(result), 201
+        return jsonify(result), 200
 
 
-def cntUpdateAgenda(id):
-    data = request.get_json(silent=True)
+    def cntDeleteAgenda(id):
+        if not delAgenda(id):
+            return jsonify({"error": "agenda no encontrado"}), 404
 
-    if data is None:
-        return jsonify({"error": "Debe enviar un JSON"}), 400
-
-    result = upAgenda(id, data)
-
-    if result is None:
-        return jsonify({"error": "agenda no encontrado"}), 404
-
-    return jsonify(result), 200
-
-
-def cntDeleteAgenda(id):
-    if not delAgenda(id):
-        return jsonify({"error": "agenda no encontrado"}), 404
-
-    return jsonify({"message": "agenda eliminado correctamente"}), 200
+        return jsonify({"message": "agenda eliminado correctamente"}), 200
