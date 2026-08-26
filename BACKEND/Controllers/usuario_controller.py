@@ -57,3 +57,27 @@ class UsuarioController:
             return jsonify({"error": "usuario no encontrado"}), 404
 
         return jsonify({"message": "usuario eliminado correctamente"}), 200
+
+
+def addusuario():
+
+    #validar que los campos extisten
+    campos_r = ["primer_nombre", "segundo_nombre", "primer_apellido", "segundo_apellido", ]
+    
+    campos_f = [for x in campos_r if x not in request.json]        
+    return jsonify({"campos": campos_f})
+    if len (campos_f) > 0:
+        return jsonify("campos": f"campos faltantes {campos_f}"}), 400    #damos los codigos de respuesta
+
+
+    # validar que no esten vacios 
+
+    nompre = resquest.json["nombre"]
+    apellido = resquest.jsdon["apellido"]
+
+
+   x = user_service.adduser(nombre, apellido, tipo_documento, fecha_nacimiento)
+   return jsonfity({"messege":x}), 201
+
+
+
