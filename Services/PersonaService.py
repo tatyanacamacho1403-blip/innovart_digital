@@ -5,9 +5,7 @@ import uuid
 class PersonaService:
     def list(self):
 
-        sql = """SELECT PER_ID, PER_UUID, PER_CEDULA, PER_DOCUMENTO, PER_PRIMER_NOMBRE, PER_SEGUNDO_NOMBRE, 
-        PER_PRIMER_APELLIDO, PER_SEGUNDO_APELLIDO, PER_CORREO, PER_DIRECCION, PER_TELEFONO, PER_FECHA_NACIMIENTO FROM 
-        T_PERSONA"""
+        sql = """SELECT * FROM T_PERSONA"""
 
         c = current_app.mysql.connection.cursor()
         c.execute(sql)
