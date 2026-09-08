@@ -15,3 +15,5 @@ class Config:
     MYSQL_DB = os.getenv("MYSQL_DATABASE", "InnovartDigital")
 
     MYSQL_PORT = int(os.getenv("MYSQL_PORT", "3306"))
+
+    MYSQL_SSL = {'ca': "etc/secrets/aiven-ca.pem"}
