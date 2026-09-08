@@ -16,4 +16,4 @@ class Config:
 
     MYSQL_PORT = int(os.getenv("MYSQL_PORT", "3306"))
     
-    MYSQL_SSL = {'ca': "etc/secrets/ca.pem"}
+    MYSQL_SSL = {'ca': "etc/secrets/aiven-ca.pem"}
