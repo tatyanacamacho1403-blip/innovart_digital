@@ -1,10 +1,8 @@
-# Servicio de servicio
-
 from flask import current_app
 from Models.servicio import Servicio
 
-
-def servListServicio():
+#listar servicios
+def list_serv():
     sql = "SELECT * FROM T_SERVICIO"
 
     c = current_app.mysql.connection.cursor()
@@ -17,13 +15,13 @@ def servListServicio():
     for u in data:
         servicios_l.append(Servicio(u[0], u[1], u[2], u[3], u[4], u[5], u[6]).to_dic())
 
-    # la siguiente linea es para cerrar la conexion a la base de datos
     c.close()
 
     return servicios_l
 
 
-def addServicio(data):
+#añadir servicios
+def add_serv(data):
     sql = "INSERT INTO T_SERVICIO (SER_ID, SER_UUID, SER_NOMBRE, SER_DESCRIPCION, SER_PRECIO, SER_TIPO, SER_ESTADO) VALUES (%s, %s, %s, %s, %s, %s, %s)"
     values = (data.get("id"), data.get("uuid"), data.get("nombre"), data.get("descripcion"), data.get("precio"), data.get("tipo"), data.get("estado"))
 
@@ -33,10 +31,11 @@ def addServicio(data):
     new_id = c.lastrowid
     c.close()
 
-    return servGetServicio(new_id)
+    return get_serv(new_id)
 
 
-def upServicio(id, data):
+#actualizar servicios
+def update_serv(id, data):
     sql = "UPDATE T_SERVICIO SET SER_UUID = %s, SER_NOMBRE = %s, SER_DESCRIPCION = %s, SER_PRECIO = %s, SER_TIPO = %s, SER_ESTADO = %s WHERE SER_ID = %s"
     values = (data.get("uuid"), data.get("nombre"), data.get("descripcion"), data.get("precio"), data.get("tipo"), data.get("estado"), id)
 
@@ -49,10 +48,10 @@ def upServicio(id, data):
     if affected == 0:
         return None
 
-    return servGetServicio(id)
+    return get_serv(id)
 
-
-def delServicio(id):
+#eliminar sevicios
+def del_serv(id):
     sql = "DELETE FROM T_SERVICIO WHERE SER_ID = %s"
 
     c = current_app.mysql.connection.cursor()
@@ -63,8 +62,8 @@ def delServicio(id):
 
     return affected > 0
 
-
-def servGetServicio(id):
+#buscar por id
+def get_serv(id):
     sql = "SELECT * FROM T_SERVICIO WHERE SER_ID = %s"
 
     c = current_app.mysql.connection.cursor()

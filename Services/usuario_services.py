@@ -1,5 +1,3 @@
-# Servicio de usuario
-
 from flask import current_app
 from Models.usuario import Usuario
 
@@ -22,7 +20,7 @@ def servListUsuario():
     return usuarios_l
 
 
-def addUsuario(data):
+def servAddUsuario(data):
     sql = "INSERT INTO T_USUARIO (USU_ID, USU_UUID, USU_CONTRASENA, USU_PER_ID) VALUES (%s, %s, %s, %s)"
     values = (data.get("id"), data.get("uuid"), data.get("contrasena"), data.get("per_id"))
 
@@ -35,7 +33,7 @@ def addUsuario(data):
     return servGetUsuario(new_id)
 
 
-def upUsuario(id, data):
+def servUpUsuario(id, data):
     sql = "UPDATE T_USUARIO SET USU_UUID = %s, USU_CONTRASENA = %s, USU_PER_ID = %s WHERE USU_ID = %s"
     values = (data.get("uuid"), data.get("contrasena"), data.get("per_id"), id)
 
@@ -51,7 +49,7 @@ def upUsuario(id, data):
     return servGetUsuario(id)
 
 
-def delUsuario(id):
+def servDelUsuario(id):
     sql = "DELETE FROM T_USUARIO WHERE USU_ID = %s"
 
     c = current_app.mysql.connection.cursor()

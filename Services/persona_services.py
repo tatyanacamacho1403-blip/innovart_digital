@@ -21,6 +21,10 @@ def servListPersona():
 
     return personas_l
 
+# falta definir el getter de persona
+def servGetPersona():
+    pass
+
 
 def addPersona(data):
     sql = "INSERT INTO T_PERSONA (PER_ID, PER_UUID, PER_CEDULA, PER_DOCUMENTO, PER_PRIMER_NOMBRE, PER_SEGUNDO_NOMBRE, PER_PRIMER_APELLIDO, PER_SEGUNDO_APELLIDO, PER_FECHA_NACIMIENTO, PER_DIRECCION, PER_TELEFONO, PER_CORREO_ELECTRONICO) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"

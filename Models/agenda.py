@@ -1,4 +1,4 @@
-class agenda:
+class Agenda:
 
     def __init__(self, id, uuid, fecha, hora, usu_id, ser_id):
         self.age_id = id
