@@ -1,31 +1,25 @@
 from flask import Flask
 from flask_mysqldb import MySQL
-#from flask_cors import CORS
-
 from Config import Config
 from Routes import loadRoutes
-
-
-
-
 
 def createApp():
 
     app = Flask(__name__)
 
+    #cargar configuración 
     app.config.from_object(Config)
+
+    #crear conexión con mysql
     mysql = MySQL(app)
 
-    #mysql.init_app(app)
-
+    #guardar mysql dentro de la app
     app.mysql = mysql
 
-    #CORS(app)
-
+    #carga todas las rutas
     loadRoutes(app)
 
     return app
-
 
 app = createApp()
 

@@ -1,73 +1,227 @@
-from flask import request, jsonify
+from flask import jsonify, request
 from Services.AgendaService import AgendaService
-
+from App import mysql
+import uuid
 
 class AgendaController:
 
     service = AgendaService()
 
-    def list(self):
-        return jsonify(self.service.list()), 200
+    def list(self):  #listar la agenda
+
+        cursor = mysql.connection.cursor()
+
+        sql = """
+            SELECT
+                AGE_ID,
+                AGE_UUID,
+                AGE_FECHA,
+                AGE_HORA,
+                AGE_USU_ID,
+                AGE_SER_ID,
+                AGE_PAG_ID
+            FROM T_AGENDA
+        """
+
+        cursor.execute(sql)
+
+        agendas = cursor.fetchall()
+
+        cursor.close()
+
+        resultado = []
+
+        for agenda in agendas:
+
+            resultado.append({
+                "id": agenda[0],
+                "uuid": str(agenda[1]),
+                "fecha": str(agenda[2]),
+                "hora": str(agenda[3]),
+                "usuario_id": agenda[4],
+                "servicio_id": agenda[5]
+            })
+
+        return jsonify(resultado), 200
 
 
-    def get(self, id):
-        data = self.service.getById(id)
+    def get(self, id):     #obtener una agenda
+        cursor = mysql.connection.cursor()
 
-        if data is None:
-            return jsonify({"error": "agenda no encontrado"}), 404
+        sql = """
+            SELECT
+                AGE_ID,
+                AGE_UUID,
+                AGE_FECHA,
+                AGE_HORA,
+                AGE_USU_ID,
+                AGE_SER_ID
+            FROM T_AGENDA
+            WHERE AGE_ID = %s
+        """
 
-        return jsonify(data), 200
+        cursor.execute(sql, (id,))
+
+        agenda = cursor.fetchone()
+
+        cursor.close()
+
+        if agenda is None:
+
+            return jsonify({
+                "mensaje": "Agenda no encontrada"
+            }), 404
+
+        resultado = {
+            "id": agenda[0],
+            "uuid": str(agenda[1]),
+            "fecha": str(agenda[2]),
+            "hora": str(agenda[3]),
+            "usuario_id": agenda[4],
+            "servicio_id": agenda[5]
+        }
+
+        return jsonify(resultado), 200
 
 
-    def create(self):
-        data = request.get_json(silent=True)
+    def create(self):  #Crear una agenda
+        data = request.get_json()
 
         if not data:
+
             return jsonify({
-                "mensaje": "El cuerpo de la petición no debe estar vacío o mal formateado"
+                "mensaje": "No se recibieron datos"
             }), 400
 
-        camposR = ["uuid", "fecha", "hora", "ser_id", "usu_id", "pag_id"]
+        fecha = data.get("fecha")
+        hora = data.get("hora")
+        usuario_id = data.get("usuario_id")
+        servicio_id = data.get("servicio_id")
 
-        camposF = [x for x in camposR if x not in data]
+        if not fecha or not hora or not usuario_id or not servicio_id:
 
-        if len(camposF) > 0:
             return jsonify({
-                "campos": f"Campos faltantes {camposF}"
+                "mensaje": "Todos los campos son obligatorios"
             }), 400
 
-        camposV = [
-            x for x in camposR
-            if data.get(x) is None or str(data.get(x)).strip() == ""
-        ]
+        agenda_uuid = str(uuid.uuid4())
 
-        if len(camposV) > 0:
-            return jsonify({
-                "campos": f"Campos vacíos {camposV}"
-            }), 400
+        cursor = mysql.connection.cursor()
 
-        result = self.service.create(data)
-        return jsonify(result), 201
+        sql = """
+            INSERT INTO T_AGENDA
+            (
+                AGE_UUID,
+                AGE_FECHA,
+                AGE_HORA,
+                AGE_USU_ID,
+                AGE_SER_ID
+            )
+            VALUES (%s, %s, %s, %s, %s)
+        """
+
+        cursor.execute(
+            sql,
+            (
+                agenda_uuid,
+                fecha,
+                hora,
+                usuario_id,
+                servicio_id
+            )
+        )
+
+        mysql.connection.commit()
+
+        nuevo_id = cursor.lastrowid
+
+        cursor.close()
+
+        return jsonify({
+            "mensaje": "Agenda creada correctamente",
+            "id": nuevo_id,
+            "uuid": agenda_uuid
+        }), 201
 
 
     def update(self, id):
-        data = request.get_json(silent=True)
+        data = request.get_json()
 
         if not data:
+
             return jsonify({
-                "mensaje": "El cuerpo de la petición no debe estar vacío o mal formateado"
+                "mensaje": "No se recibieron datos"
             }), 400
 
-        result = self.service.update(id, data)
+        fecha = data.get("fecha")
+        hora = data.get("hora")
+        usuario_id = data.get("usuario_id")
+        servicio_id = data.get("servicio_id")
 
-        if result is None:
-            return jsonify({"error": "agenda no encontrado"}), 404
+        cursor = mysql.connection.cursor()
 
-        return jsonify(result), 200
+        sql = """
+            UPDATE T_AGENDA
+            SET
+                AGE_FECHA = %s,
+                AGE_HORA = %s,
+                AGE_USU_ID = %s,
+                AGE_SER_ID = %s
+            WHERE AGE_ID = %s
+        """
+
+        cursor.execute(
+            sql,
+            (
+                fecha,
+                hora,
+                usuario_id,
+                servicio_id,
+                id
+            )
+        )
+
+        mysql.connection.commit()
+
+        filas = cursor.rowcount
+
+        cursor.close()
+
+        if filas == 0:
+
+            return jsonify({
+                "mensaje": "Agenda no encontrada"
+            }), 404
+
+        return jsonify({
+            "mensaje": "Agenda actualizada correctamente"
+        }), 200
+
 
 
     def delete(self, id):
-        if not self.service.delete(id):
-            return jsonify({"error": "agenda no encontrado"}), 404
 
-        return jsonify({"message": "agenda eliminado correctamente"}), 200
+        cursor = mysql.connection.cursor()
+
+        sql = """
+            DELETE FROM T_AGENDA
+            WHERE AGE_ID = %s
+        """
+
+        cursor.execute(sql, (id,))
+
+        mysql.connection.commit()
+
+        filas = cursor.rowcount
+
+        cursor.close()
+
+        if filas == 0:
+
+            return jsonify({
+                "mensaje": "Agenda no encontrada"
+            }), 404
+
+        return jsonify({
+            "mensaje": "Agenda eliminada correctamente"
+        }), 200

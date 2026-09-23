@@ -11,6 +11,11 @@ class Usuario:
             "id": self.usu_id,
             "uuid": self.usu_uuid,
             "correo": self.usu_correo,
-            "contrasena": self.usu_contrasena,
             "per_id": self.usu_per_id
         }
+
+        # La contraseña NO se devuelve normalmente
+        if incluir_contrasena:
+            datos["contrasena"] = self.usu_contrasena
+
+        return datos

@@ -17,9 +17,30 @@ def get(id):
     return controller.get(id)
 
 
-@UsuarioRoutes.route("/", methods=["POST"])
-def create():
-    return controller.create()
+@UsuarioRoutes.route(
+    "/registro",
+    methods=["POST"]
+)
+def registrar_usuario():
+
+    from App import app
+
+    return UsuarioController.registrar(
+        app.mysql
+    )
+
+
+@UsuarioRoutes.route(
+    "/login",
+    methods=["POST"]
+)
+def login_usuario():
+
+    from App import app
+
+    return UsuarioController.login(
+        app.mysql
+    )
 
 
 @UsuarioRoutes.route("/<int:id>", methods=["PUT"])
