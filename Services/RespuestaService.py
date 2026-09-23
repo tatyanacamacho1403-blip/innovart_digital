@@ -5,7 +5,7 @@ from Models.Respuesta import Respuesta
 class RespuestaService:
     def list(self):
 
-        sql = "SELECT RES_ID, RES_UUID, RES_HORA, RES_DESCRIPCION, RES_FECHA FROM t_respusta"
+        sql = "SELECT RES_ID, RES_UUID, RES_HORA, RES_DESCRIPCION, RES_FECHA FROM t_respuesta"
 
         c = current_app.mysql.connection.cursor()
         c.execute(sql)
@@ -33,7 +33,7 @@ class RespuestaService:
 
     def getById(self, id):
 
-        sql = "SELECT RES_ID, RES_UUID, RES_HORA, RES_DESCRIPCION, RES_FECHA FROM t_respusta WHERE RES_ID = %s"
+        sql = "SELECT RES_ID, RES_UUID, RES_HORA, RES_DESCRIPCION, RES_FECHA FROM t_respuesta WHERE RES_ID = %s"
 
         c = current_app.mysql.connection.cursor()
         c.execute(sql, (id,))
@@ -58,7 +58,7 @@ class RespuestaService:
 
     def create(self, data):
 
-        sql = "INSERT INTO t_respusta (RES_UUID, RES_HORA, RES_DESCRIPCION, RES_FECHA) VALUES (%s, %s, %s, %s)"
+        sql = "INSERT INTO t_respuesta (RES_UUID, RES_HORA, RES_DESCRIPCION, RES_FECHA) VALUES (%s, %s, %s, %s)"
 
         values = (
             data.get('uuid'),
@@ -80,7 +80,7 @@ class RespuestaService:
 
     def update(self, id, data):
 
-        sql = "UPDATE t_respusta SET RES_UUID = %s, RES_HORA = %s, RES_DESCRIPCION = %s, RES_FECHA = %s WHERE RES_ID = %s"
+        sql = "UPDATE t_respuesta SET RES_UUID = %s, RES_HORA = %s, RES_DESCRIPCION = %s, RES_FECHA = %s WHERE RES_ID = %s"
 
         values = (
             data.get('uuid'),
@@ -106,7 +106,7 @@ class RespuestaService:
 
     def delete(self, id):
 
-        sql = "DELETE FROM t_respusta WHERE RES_ID = %s"
+        sql = "DELETE FROM t_respuesta WHERE RES_ID = %s"
 
         c = current_app.mysql.connection.cursor()
         c.execute(sql, (id,))
