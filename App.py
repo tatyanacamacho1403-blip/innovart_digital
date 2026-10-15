@@ -1,36 +1,27 @@
 from flask import Flask
 from flask_mysqldb import MySQL
 from flask_cors import CORS
-from Routes import loadRoutes
-
-    loadRoutes(app)
-
-    @app.route("/")
-    def home():
-        return {"mensaje": "API Innovart Digital funcionando"}, 200
-
-    return app
 
 from Config import Config
-
 
 mysql = MySQL()
 
 
 def createApp():
-
     app = Flask(__name__)
-
     app.config.from_object(Config)
 
     mysql.init_app(app)
-
     app.mysql = mysql
 
     CORS(app)
 
     from Routes import loadRoutes
     loadRoutes(app)
+
+    @app.route("/")
+    def home():
+        return {"mensaje": "API Innovart Digital funcionando"}, 200
 
     return app
 
