@@ -6,15 +6,14 @@ class Usuario:
         self.usu_contrasena = contrasena
         self.usu_per_id = per_id
 
-    def to_dict(self):
-        return {
+    def to_dict(self, incluir_contrasena=False):
+        datos = {
             "id": self.usu_id,
             "uuid": self.usu_uuid,
             "correo": self.usu_correo,
             "per_id": self.usu_per_id
         }
 
-        # La contraseña NO se devuelve normalmente
         if incluir_contrasena:
             datos["contrasena"] = self.usu_contrasena
 
