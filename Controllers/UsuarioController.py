@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import current_app, jsonify, request
 from Services.UsuarioService import UsuarioService
 
 
@@ -49,8 +49,8 @@ class UsuarioController:
                 "mensaje": "La contraseña debe tener mínimo 8 caracteres"
             }), 400
 
-        usuario, error = UsuarioService.crear_usuario(
-            mysql,
+        usuario, error = self.service.create(
+            current_app.mysql,
             correo,
             contrasena,
             per_id
@@ -68,8 +68,7 @@ class UsuarioController:
         }), 201
 
 
-    @staticmethod
-    def login(mysql):
+    def login(self):
 
         data = request.get_json()
 
@@ -89,7 +88,7 @@ class UsuarioController:
             }), 400
 
         usuario = UsuarioService.validar_login(
-            mysql,
+            current_app.mysql,
             correo,
             contrasena
         )
