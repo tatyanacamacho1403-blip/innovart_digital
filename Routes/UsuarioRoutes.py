@@ -1,5 +1,5 @@
 from flask import Blueprint
-from Controllers import UsuarioController
+from Controllers.UsuarioController import UsuarioController
 
 
 UsuarioRoutes = Blueprint("UsuarioRoutes", __name__)
@@ -22,12 +22,7 @@ def get(id):
     methods=["POST"]
 )
 def registrar_usuario():
-
-    from App import app
-
-    return UsuarioController.registrar(
-        app.mysql
-    )
+    return controller.create()
 
 
 @UsuarioRoutes.route(
@@ -35,12 +30,7 @@ def registrar_usuario():
     methods=["POST"]
 )
 def login_usuario():
-
-    from App import app
-
-    return UsuarioController.login(
-        app.mysql
-    )
+    return controller.login()
 
 
 @UsuarioRoutes.route("/<int:id>", methods=["PUT"])
