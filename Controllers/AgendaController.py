@@ -35,11 +35,12 @@ class AgendaController:
 
             resultado.append({
                 "id": agenda[0],
-                "uuid": str(agenda[1]),
-                "fecha": str(agenda[2]),
-                "hora": str(agenda[3]),
+                "uuid": agenda[1],
+                "fecha":agenda[2],
+                "hora": agenda[3],
                 "usuario_id": agenda[4],
-                "servicio_id": agenda[5]
+                "servicio_id": agenda[5],
+                "pago_id":agenda[6]
             })
 
         return jsonify(resultado), 200
