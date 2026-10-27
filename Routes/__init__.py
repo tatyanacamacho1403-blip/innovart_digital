@@ -13,7 +13,7 @@ from .documentacion import documentacion_bp
 
 def loadRoutes(app):
 
-    app.register_blueprint(AgendaRoutes, url_prefix="/api/agendas")
+    app.register_blueprint(AgendaRoutes, url_prefix="/agendas")
     app.register_blueprint(ConsultaRoutes, url_prefix="/api/consultas")
     app.register_blueprint(EmpleadoRoutes, url_prefix="/api/empleados")
     app.register_blueprint(PagoRoutes, url_prefix="/api/pagos")
