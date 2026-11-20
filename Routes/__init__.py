@@ -13,12 +13,12 @@ from .documentacion import documentacion_bp
 
 def loadRoutes(app):
 
-    app.register_blueprint(AgendaRoutes, url_prefix="/agendas")
-    app.register_blueprint(ConsultaRoutes, url_prefix="/api/consultas")
-    app.register_blueprint(EmpleadoRoutes, url_prefix="/api/empleados")
-    app.register_blueprint(PagoRoutes, url_prefix="/api/pagos")
-    app.register_blueprint(PersonaRoutes, url_prefix="/api/personas")
-    app.register_blueprint(RespuestaRoutes, url_prefix="/api/respuestas")
+    app.register_blueprint(AgendaRoutes, url_prefix="/agendas") #ya bien
+    app.register_blueprint(ConsultaRoutes, url_prefix="/api/consultas")  #bien
+    app.register_blueprint(EmpleadoRoutes, url_prefix="/api/empleados")  #bien
+    app.register_blueprint(PagoRoutes, url_prefix="/api/pagos")         #bien
+    app.register_blueprint(PersonaRoutes, url_prefix="/api/personas")  #todo bien
+    app.register_blueprint(RespuestaRoutes, url_prefix="/api/respuestas")  #no 
     app.register_blueprint(RolRoutes, url_prefix="/api/roles")
     app.register_blueprint(ServicioAgendaRoutes, url_prefix="/api/servicios-agenda")
     app.register_blueprint(ServicioRoutes, url_prefix="/api/servicios")

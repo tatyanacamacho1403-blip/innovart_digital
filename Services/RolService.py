@@ -5,7 +5,7 @@ from Models.Rol import Rol
 class RolService:
     def list(self):
 
-        sql = "SELECT ROL_ID, ROL_UUID, ROL_TIPO FROM t_rol"
+        sql = "SELECT ROL_ID, ROL_UUID, ROL_TIPO FROM T_ROL"
 
         c = current_app.mysql.connection.cursor()
         c.execute(sql)
@@ -31,7 +31,7 @@ class RolService:
 
     def getById(self, id):
 
-        sql = "SELECT ROL_ID, ROL_UUID, ROL_TIPO FROM t_rol WHERE ROL_ID = %s"
+        sql = "SELECT ROL_ID, ROL_UUID, ROL_TIPO FROM T_ROL WHERE ROL_ID = %s"
 
         c = current_app.mysql.connection.cursor()
         c.execute(sql, (id,))
@@ -54,7 +54,7 @@ class RolService:
 
     def create(self, data):
 
-        sql = "INSERT INTO t_rol (ROL_UUID, ROL_TIPO) VALUES (%s, %s)"
+        sql = "INSERT INTO T_ROL (ROL_UUID, ROL_TIPO) VALUES (%s, %s)"
 
         values = (data.get('uuid'), data.get('tipo'),)
 
@@ -71,19 +71,20 @@ class RolService:
 
     def update(self, id, data):
 
-        sql = "UPDATE t_rol SET ROL_UUID = %s, ROL_TIPO = %s WHERE ROL_ID = %s"
+        sql = "UPDATE T_ROL SET ROL_UUID = %s, ROL_TIPO = %s WHERE ROL_ID = %s"
 
         values = (data.get('uuid'), data.get('tipo'), id)
 
         c = current_app.mysql.connection.cursor()
         c.execute(sql, values)
+        exists = c.rowcount > 0
+        if not exists:
+            c.execute("SELECT 1 FROM T_ROL WHERE ROL_ID = %s", (id,))
+            exists = c.fetchone() is not None
         current_app.mysql.connection.commit()
-
-        affected = c.rowcount
-
         c.close()
 
-        if affected == 0:
+        if not exists:
             return None
 
         return self.getById(id)
@@ -91,7 +92,7 @@ class RolService:
 
     def delete(self, id):
 
-        sql = "DELETE FROM t_rol WHERE ROL_ID = %s"
+        sql = "DELETE FROM T_ROL WHERE ROL_ID = %s"
 
         c = current_app.mysql.connection.cursor()
         c.execute(sql, (id,))

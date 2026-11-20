@@ -9,7 +9,7 @@ class UsuarioService:
 
     def list(self):
 
-        sql = "SELECT USU_ID, USU_UUID, USU_CORREO, USU_CONTRASEÑA, USU_PER_ID FROM t_usuario"
+        sql = "SELECT USU_ID, USU_UUID, USU_CORREO, USU_PER_ID FROM T_USUARIO"
 
         c = current_app.mysql.connection.cursor()
         c.execute(sql)
@@ -24,8 +24,8 @@ class UsuarioService:
                     u[0],
                     u[1],
                     u[2],
-                    u[3],
-                    u[4]
+                    None,
+                    u[3]
             )
 
             lista_l.append(objeto.to_dict())
@@ -37,7 +37,7 @@ class UsuarioService:
 
     def getById(self, id):
 
-        sql = "SELECT USU_ID, USU_UUID, USU_CORREO, USU_CONTRASEÑA, USU_PER_ID FROM t_usuario WHERE USU_ID = %s"
+        sql = "SELECT USU_ID, USU_UUID, USU_CORREO, USU_PER_ID FROM T_USUARIO WHERE USU_ID = %s"
 
         c = current_app.mysql.connection.cursor()
         c.execute(sql, (id,))
@@ -53,8 +53,8 @@ class UsuarioService:
                 data[0],
                 data[1],
                 data[2],
-                data[3],
-                data[4]
+                None,
+                data[3]
         )
 
         return objeto.to_dict()
@@ -183,28 +183,39 @@ class UsuarioService:
 
 
     def update(self, id, data):
-
-        sql = "UPDATE t_usuario SET USU_UUID = %s, USU_CORREO = %s, USU_CONTRASEÑA = %s, USU_PER_ID = %s WHERE USU_ID = %s"
-
-        values = (data.get('uuid'), data.get('correo'), data.get('contrasena'), data.get('per_id'), id)
-
-        c = current_app.mysql.connection.cursor()
-        c.execute(sql, values)
-        current_app.mysql.connection.commit()
-
-        affected = c.rowcount
-
-        c.close()
-
-        if affected == 0:
+        connection = current_app.mysql.connection
+        cursor = connection.cursor()
+        cursor.execute(
+            "SELECT USU_UUID, USU_CONTRASEÑA, USU_PER_ID, USU_CORREO FROM T_USUARIO WHERE USU_ID = %s",
+            (id,),
+        )
+        current = cursor.fetchone()
+        if current is None:
+            cursor.close()
             return None
 
+        password = data.get("contrasena")
+        password_hash = generate_password_hash(password) if password else current[1]
+        correo = str(data.get("correo", current[3])).strip().lower()
+        person_id = data.get("per_id", current[2])
+        try:
+            cursor.execute(
+                "UPDATE T_USUARIO SET USU_UUID = %s, USU_CORREO = %s, USU_CONTRASEÑA = %s, USU_PER_ID = %s WHERE USU_ID = %s",
+                (data.get("uuid", current[0]), correo, password_hash, person_id, id),
+            )
+            if correo != current[3]:
+                cursor.execute("UPDATE T_PERSONA SET PER_CORREO = %s WHERE PER_ID = %s", (correo, current[2]))
+            connection.commit()
+        except Exception:
+            connection.rollback()
+            raise
+        finally:
+            cursor.close()
         return self.getById(id)
-
 
     def delete(self, id):
 
-        sql = "DELETE FROM t_usuario WHERE USU_ID = %s"
+        sql = "DELETE FROM T_USUARIO WHERE USU_ID = %s"
 
         c = current_app.mysql.connection.cursor()
         c.execute(sql, (id,))

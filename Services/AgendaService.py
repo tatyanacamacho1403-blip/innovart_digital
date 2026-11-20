@@ -85,13 +85,14 @@ class AgendaService:
 
         c = current_app.mysql.connection.cursor()
         c.execute(sql, values)
+        exists = c.rowcount > 0
+        if not exists:
+            c.execute("SELECT 1 FROM T_AGENDA WHERE AGE_ID = %s", (id,))
+            exists = c.fetchone() is not None
         current_app.mysql.connection.commit()
-
-        affected = c.rowcount
-
         c.close()
 
-        if affected == 0:
+        if not exists:
             return None
 
         return self.getById(id)

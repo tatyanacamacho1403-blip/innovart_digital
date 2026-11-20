@@ -1,4 +1,5 @@
 from flask import request, jsonify
+from Controllers.validation import validate_complete_payload
 from Services.ServicioService import ServicioService
 
 
@@ -53,10 +54,9 @@ class ServicioController:
     def update(self, id):
         data = request.get_json(silent=True)
 
-        if not data:
-            return jsonify({
-                "mensaje": "El cuerpo de la petición no debe estar vacío o mal formateado"
-            }), 400
+        error = validate_complete_payload(data, ['uuid', 'nombre', 'descripcion', 'precio', 'tipo', 'estado'])
+        if error:
+            return error
 
         result = self.service.update(id, data)
 

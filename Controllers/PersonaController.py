@@ -1,5 +1,6 @@
-from flask import request, jsonify
+from flask import request, jsonify, g
 from Services.PersonaService import PersonaService
+from Security import is_admin
 
 
 class PersonaController:
@@ -7,10 +8,15 @@ class PersonaController:
     service = PersonaService()
 
     def list(self):
-        return jsonify(self.service.list()), 200
+        if is_admin():
+            return jsonify(self.service.list()), 200
+        person = self.service.getById(g.person_id)
+        return jsonify([person] if person else []), 200
 
 
     def get(self, id):
+        if id != g.person_id and not is_admin():
+            return jsonify({"error": "persona no encontrada"}), 404
         data = self.service.getById(id)
 
         if data is None:
@@ -51,12 +57,14 @@ class PersonaController:
 
 
     def update(self, id):
+        if id != g.person_id and not is_admin():
+            return jsonify({"error": "persona no encontrada"}), 404
         data = request.get_json(silent=True)
 
-        if not data:
-            return jsonify({
-                "mensaje": "El cuerpo de la petición no debe estar vacío o mal formateado"
-            }), 400
+        required = ["cedula", "documento", "primer_nombre", "segundo_nombre", "primer_apellido", "segundo_apellido", "correo", "direccion", "telefono", "fecha_nacimiento"]
+        missing = [field for field in required if field not in data or data.get(field) is None or str(data.get(field)).strip() == ""] if isinstance(data, dict) else required
+        if missing:
+            return jsonify({"mensaje": "Envía todos los campos requeridos", "campos": missing}), 400
 
         result = self.service.update(id, data)
 
@@ -67,6 +75,8 @@ class PersonaController:
 
 
     def delete(self, id):
+        if id != g.person_id and not is_admin():
+            return jsonify({"error": "persona no encontrada"}), 404
         if not self.service.delete(id):
             return jsonify({"error": "persona no encontrado"}), 404
 

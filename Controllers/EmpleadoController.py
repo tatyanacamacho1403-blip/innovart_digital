@@ -1,4 +1,5 @@
 from flask import request, jsonify
+from Controllers.validation import validate_complete_payload
 from Services.EmpleadoService import EmpleadoService
 
 
@@ -53,10 +54,9 @@ class EmpleadoController:
     def update(self, id):
         data = request.get_json(silent=True)
 
-        if not data:
-            return jsonify({
-                "mensaje": "El cuerpo de la petición no debe estar vacío o mal formateado"
-            }), 400
+        error = validate_complete_payload(data, ['uuid', 'rol_id', 'res_id', 'per_id', 'ser_id'])
+        if error:
+            return error
 
         result = self.service.update(id, data)
 
