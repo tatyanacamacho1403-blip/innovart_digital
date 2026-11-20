@@ -1,10 +1,10 @@
-from flask import g, jsonify, request
-from App import mysql
+from flask import current_app, g, jsonify, request
 import uuid
 
 
 class AgendaController:
     def list(self):
+        mysql = current_app.mysql
         cursor = mysql.connection.cursor()
         cursor.execute(
             """SELECT AGE_ID, AGE_UUID, AGE_FECHA, AGE_HORA, AGE_USU_ID, AGE_SER_ID, AGE_PAG_ID
@@ -20,6 +20,7 @@ class AgendaController:
         } for row in agendas]), 200
 
     def get(self, id):
+        mysql = current_app.mysql
         cursor = mysql.connection.cursor()
         cursor.execute(
             """SELECT AGE_ID, AGE_UUID, AGE_FECHA, AGE_HORA, AGE_USU_ID, AGE_SER_ID
@@ -42,6 +43,7 @@ class AgendaController:
         fecha, hora, servicio_id = data.get("fecha"), data.get("hora"), data.get("servicio_id")
         if not fecha or not hora or not servicio_id:
             return jsonify({"mensaje": "Fecha, hora y servicio son obligatorios"}), 400
+        mysql = current_app.mysql
         cursor = mysql.connection.cursor()
         agenda_uuid = str(uuid.uuid4())
         try:
@@ -65,6 +67,7 @@ class AgendaController:
         fecha, hora, servicio_id = data.get("fecha"), data.get("hora"), data.get("servicio_id")
         if not fecha or not hora or not servicio_id:
             return jsonify({"mensaje": "Fecha, hora y servicio son obligatorios"}), 400
+        mysql = current_app.mysql
         cursor = mysql.connection.cursor()
         cursor.execute(
             "UPDATE T_AGENDA SET AGE_FECHA = %s, AGE_HORA = %s, AGE_SER_ID = %s WHERE AGE_ID = %s AND AGE_USU_ID = %s",
@@ -83,6 +86,7 @@ class AgendaController:
         return jsonify({"mensaje": "Agenda actualizada correctamente"}), 200
 
     def delete(self, id):
+        mysql = current_app.mysql
         cursor = mysql.connection.cursor()
         cursor.execute("DELETE FROM T_AGENDA WHERE AGE_ID = %s AND AGE_USU_ID = %s", (id, g.user_id))
         mysql.connection.commit()

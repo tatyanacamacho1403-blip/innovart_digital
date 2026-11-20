@@ -1,6 +1,7 @@
 from flask import current_app
 from Models.Persona import Persona
 import uuid
+from MySQLdb import IntegrityError
 
 class PersonaService:
     def list(self):
@@ -10,9 +11,11 @@ class PersonaService:
         T_PERSONA"""
 
         c = current_app.mysql.connection.cursor()
-        c.execute(sql)
-
-        data = c.fetchall()
+        try:
+            c.execute(sql)
+            data = c.fetchall()
+        finally:
+            c.close()
 
         lista_l = []
 
@@ -35,8 +38,6 @@ class PersonaService:
 
             lista_l.append(objeto.to_dict())
 
-        c.close()
-
         return lista_l
 
 
@@ -47,11 +48,11 @@ class PersonaService:
           PER_CORREO, PER_DIRECCION, PER_TELEFONO, PER_FECHA_NACIMIENTO FROM T_PERSONA WHERE PER_ID = %s"""
 
         c = current_app.mysql.connection.cursor()
-        c.execute(sql, (id,))
-
-        data = c.fetchone()
-
-        c.close()
+        try:
+            c.execute(sql, (id,))
+            data = c.fetchone()
+        finally:
+            c.close()
 
         if data is None:
             return None
@@ -84,35 +85,43 @@ class PersonaService:
                   data.get('documento'), data.get('primer_nombre'), data.get('segundo_nombre'), data.get('primer_apellido'), 
                   data.get('segundo_apellido'), data.get('correo'), data.get('direccion'), data.get('telefono'), data.get('fecha_nacimiento'),)
 
-        c = current_app.mysql.connection.cursor()
-        c.execute(sql, values)
-        current_app.mysql.connection.commit()
-
-        new_id = c.lastrowid
-
-        c.close()
+        connection = current_app.mysql.connection
+        c = connection.cursor()
+        try:
+            c.execute(sql, values)
+            new_id = c.lastrowid
+            connection.commit()
+        except Exception:
+            connection.rollback()
+            raise
+        finally:
+            c.close()
 
         return self.getById(new_id)
 
 
     def update(self, id, data):
 
-        sql = """UPDATE T_PERSONA SET PER_UUID = %s, PER_CEDULA = %s, PER_DOCUMENTO = %s, PER_PRIMER_NOMBRE = %s, PER_SEGUNDO_NOMBRE = %s,
+        sql = """UPDATE T_PERSONA SET PER_CEDULA = %s, PER_DOCUMENTO = %s, PER_PRIMER_NOMBRE = %s, PER_SEGUNDO_NOMBRE = %s,
           PER_PRIMER_APELLIDO = %s, PER_SEGUNDO_APELLIDO = %s, PER_CORREO = %s, PER_DIRECCION = %s, PER_TELEFONO = %s, PER_FECHA_NACIMIENTO = %s 
           WHERE PER_ID = %s"""
 
-        values = (data.get('uuid'), data.get('cedula'), data.get('documento'), data.get('primer_nombre'), data.get('segundo_nombre'),
+        values = (data.get('cedula'), data.get('documento'), data.get('primer_nombre'), data.get('segundo_nombre'),
                    data.get('primer_apellido'), data.get('segundo_apellido'), data.get('correo'), data.get('direccion'), data.get('telefono'), 
                    data.get('fecha_nacimiento'), id)
 
-        c = current_app.mysql.connection.cursor()
-        c.execute(sql, values)
-        exists = c.rowcount > 0
-        if not exists:
+        connection = current_app.mysql.connection
+        c = connection.cursor()
+        try:
+            c.execute(sql, values)
             c.execute("SELECT 1 FROM T_PERSONA WHERE PER_ID = %s", (id,))
             exists = c.fetchone() is not None
-        current_app.mysql.connection.commit()
-        c.close()
+            connection.commit()
+        except Exception:
+            connection.rollback()
+            raise
+        finally:
+            c.close()
 
         if not exists:
             return None
@@ -124,12 +133,19 @@ class PersonaService:
 
         sql = "DELETE FROM T_PERSONA WHERE PER_ID = %s"
 
-        c = current_app.mysql.connection.cursor()
-        c.execute(sql, (id,))
-        current_app.mysql.connection.commit()
-
-        affected = c.rowcount
-
-        c.close()
+        connection = current_app.mysql.connection
+        c = connection.cursor()
+        try:
+            c.execute(sql, (id,))
+            affected = c.rowcount
+            connection.commit()
+        except IntegrityError:
+            connection.rollback()
+            raise
+        except Exception:
+            connection.rollback()
+            raise
+        finally:
+            c.close()
 
         return affected > 0

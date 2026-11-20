@@ -1,4 +1,5 @@
 from flask import request, jsonify, g
+from MySQLdb import IntegrityError
 from Services.PersonaService import PersonaService
 from Security import is_admin
 
@@ -28,12 +29,12 @@ class PersonaController:
     def create(self):
         data = request.get_json(silent=True)
 
-        if not data:
+        if not isinstance(data, dict) or not data:
             return jsonify({
                 "mensaje": "El cuerpo de la petición no debe estar vacío o mal formateado"
             }), 400
 
-        camposR = [ "cedula", "documento", "primer_nombre", "segundo_nombre", "primer_apellido", "segundo_apellido", "correo", "direccion", "telefono", "fecha_nacimiento"]
+        camposR = ["cedula", "documento", "primer_nombre", "primer_apellido", "direccion", "fecha_nacimiento"]
 
         camposF = [x for x in camposR if x not in data]
 
@@ -52,6 +53,7 @@ class PersonaController:
                 "campos": f"Campos vacíos {camposV}"
             }), 400
 
+        data = self._normalize_optional_fields(data)
         result = self.service.create(data)
         return jsonify(result), 201
 
@@ -61,11 +63,15 @@ class PersonaController:
             return jsonify({"error": "persona no encontrada"}), 404
         data = request.get_json(silent=True)
 
-        required = ["cedula", "documento", "primer_nombre", "segundo_nombre", "primer_apellido", "segundo_apellido", "correo", "direccion", "telefono", "fecha_nacimiento"]
-        missing = [field for field in required if field not in data or data.get(field) is None or str(data.get(field)).strip() == ""] if isinstance(data, dict) else required
+        if not isinstance(data, dict) or not data:
+            return jsonify({"mensaje": "Envía un objeto JSON válido"}), 400
+
+        required = ["cedula", "documento", "primer_nombre", "primer_apellido", "direccion", "fecha_nacimiento"]
+        missing = [field for field in required if field not in data or data.get(field) is None or str(data.get(field)).strip() == ""]
         if missing:
             return jsonify({"mensaje": "Envía todos los campos requeridos", "campos": missing}), 400
 
+        data = self._normalize_optional_fields(data)
         result = self.service.update(id, data)
 
         if result is None:
@@ -73,11 +79,24 @@ class PersonaController:
 
         return jsonify(result), 200
 
+    @staticmethod
+    def _normalize_optional_fields(data):
+        normalized = data.copy()
+        for field in ("segundo_nombre", "segundo_apellido", "correo", "telefono"):
+            value = normalized.get(field)
+            if value is None or (isinstance(value, str) and not value.strip()):
+                normalized[field] = None
+        return normalized
+
 
     def delete(self, id):
         if id != g.person_id and not is_admin():
             return jsonify({"error": "persona no encontrada"}), 404
-        if not self.service.delete(id):
+        try:
+            deleted = self.service.delete(id)
+        except IntegrityError:
+            return jsonify({"mensaje": "No se puede eliminar la persona porque tiene registros relacionados"}), 409
+        if not deleted:
             return jsonify({"error": "persona no encontrado"}), 404
 
         return jsonify({"message": "persona eliminado correctamente"}), 200

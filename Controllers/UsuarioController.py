@@ -13,9 +13,8 @@ from Services.UsuarioService import UsuarioService
 class UsuarioController:
     service = UsuarioService()
     person_fields = (
-        "cedula", "documento", "primer_nombre", "segundo_nombre",
-        "primer_apellido", "segundo_apellido", "direccion", "telefono",
-        "fecha_nacimiento",
+        "cedula", "documento", "primer_nombre", "primer_apellido",
+        "direccion", "fecha_nacimiento",
     )
 
     def list(self):
@@ -39,13 +38,22 @@ class UsuarioController:
 
         correo = str(data.get("correo", "")).strip().lower()
         contrasena = data.get("contrasena")
-        missing = [field for field in self.person_fields if not str(data.get(field, "")).strip()]
+        missing = [
+            field for field in self.person_fields
+            if data.get(field) is None or not str(data.get(field)).strip()
+        ]
         if not correo or not contrasena or missing:
             return jsonify({"mensaje": "Completa correo, contraseña y todos los datos personales", "campos": missing}), 400
         if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", correo):
             return jsonify({"mensaje": "Correo no válido"}), 400
         if not isinstance(contrasena, str) or len(contrasena) < 8:
             return jsonify({"mensaje": "La contraseña debe tener mínimo 8 caracteres"}), 400
+
+        optional_fields = ("segundo_nombre", "segundo_apellido", "telefono")
+        for field in optional_fields:
+            value = data.get(field)
+            if value is None or (isinstance(value, str) and not value.strip()):
+                data[field] = None
 
         mysql = current_app.mysql
         cursor = mysql.connection.cursor()
