@@ -1,6 +1,6 @@
 
 # Etapa 1: construir la aplicación Flutter Web
-FROM ghcr.io/cirruslabs/flutter:3.47.9 AS build
+FROM ghcr.io/cirruslabs/flutter:stable AS build
 
 WORKDIR /app
 
