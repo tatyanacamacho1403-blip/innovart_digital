@@ -1,6 +1,6 @@
 
 # Etapa 1: construir la aplicación Flutter Web
-FROM forthecommunity/flutter:3.47.9 AS build
+FROM plugfox/flutter:3.47.9-web AS build
 
 WORKDIR /app
 
