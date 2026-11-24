@@ -6,6 +6,7 @@ import 'core/theme/app_theme.dart';
 import 'logic/auth_service.dart';
 import 'presentation/screens/auth/login_screen.dart';
 import 'presentation/screens/auth/register_screen.dart';
+import 'presentation/screens/home/landing_screen.dart';
 import 'presentation/screens/home/main_shell.dart';
 
 const _developmentServicesRoute = '/__dev_services';
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
           case AppRoutes.home:
             return MaterialPageRoute<void>(
               settings: settings,
-              builder: (_) => const _SessionStartup(),
+              builder: (_) => const LandingScreen(),
             );
           case AppRoutes.login:
             return MaterialPageRoute<void>(
@@ -62,75 +63,6 @@ class MyApp extends StatelessWidget {
         }
         return null;
       },
-    );
-  }
-}
-
-class _SessionStartup extends StatefulWidget {
-  const _SessionStartup();
-
-  @override
-  State<_SessionStartup> createState() => _SessionStartupState();
-}
-
-class _SessionStartupState extends State<_SessionStartup> {
-  SessionRestoreResult? _result;
-
-  @override
-  void initState() {
-    super.initState();
-    _restore();
-  }
-
-  Future<void> _restore() async {
-    setState(() => _result = null);
-    final result = await AuthService.instance.restoreSession();
-    if (!mounted) return;
-    if (result == SessionRestoreResult.connectionError) {
-      setState(() => _result = result);
-      return;
-    }
-    Navigator.pushReplacementNamed(
-      context,
-      result == SessionRestoreResult.authenticated
-          ? AppRoutes.main
-          : AppRoutes.login,
-      arguments: 0,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (_result != SessionRestoreResult.connectionError) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-    return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.wifi_off_rounded, size: 42),
-              const SizedBox(height: 16),
-              const Text(
-                'No pudimos validar tu sesión. Conéctate a Internet e inténtalo de nuevo.',
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              FilledButton(
-                onPressed: _restore,
-                child: const Text('Reintentar'),
-              ),
-              TextButton(
-                onPressed: () =>
-                    Navigator.pushReplacementNamed(context, AppRoutes.login),
-                child: const Text('Ir al inicio de sesión'),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

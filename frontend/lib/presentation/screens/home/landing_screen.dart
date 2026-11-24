@@ -66,6 +66,14 @@ class _LandingScreenState extends State<LandingScreen> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    // Restore credentials in the background while keeping the public page
+    // available. Authenticated visitors can use the booking entry directly.
+    AuthService.instance.restoreSession();
+  }
+
   void _scrollTo(GlobalKey key) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
