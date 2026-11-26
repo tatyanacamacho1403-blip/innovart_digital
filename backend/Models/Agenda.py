@@ -1,5 +1,6 @@
 class Agenda:
-    def __init__(self, id, uuid, fecha, hora, ser_id, usu_id, age_pag_id):
+    def __init__(self, id, uuid, fecha, hora, ser_id, usu_id, age_pag_id,
+                 direccion=None, descripcion=None):
         self.age_id = id
         self.age_uuid = uuid
         self.age_fecha = fecha
@@ -7,6 +8,8 @@ class Agenda:
         self.age_ser_id = ser_id
         self.age_usu_id = usu_id
         self.age_pag_id = age_pag_id
+        self.age_direccion = direccion
+        self.age_descripcion = descripcion
 
     def to_dict(self):
         return {
@@ -16,5 +19,7 @@ class Agenda:
             "hora": self.age_hora,
             "ser_id": self.age_ser_id,
             "usu_id": self.age_usu_id,
-            "pag_id": self.age_pag_id
+            "pag_id": self.age_pag_id,
+            "direccion": self.age_direccion,
+            "descripcion": self.age_descripcion
         }

@@ -110,14 +110,16 @@ class ServiceController extends ChangeNotifier {
 
   Future<void> add(
     ServiceCatalogItem service,
-    DateTime dateTime,
-    UserModel user,
-  ) async {
+    DateTime dateTime, {
+    required String address,
+    required String description,
+  }) async {
     final result = await ApiClient.instance.post('/agendas/', {
       'fecha': _dateString(dateTime),
       'hora': _timeString(dateTime),
-      'usuario_id': user.id,
       'servicio_id': service.id,
+      'direccion': address,
+      'descripcion': description,
     });
     if (result is! Map || result['id'] == null) {
       throw const ApiException('El backend no confirmó la cita creada.');
@@ -128,6 +130,8 @@ class ServiceController extends ChangeNotifier {
         serviceId: service.id,
         name: service.name,
         dateTime: dateTime,
+        address: address,
+        description: description,
       ),
     );
     _services.sort((a, b) => a.dateTime.compareTo(b.dateTime));

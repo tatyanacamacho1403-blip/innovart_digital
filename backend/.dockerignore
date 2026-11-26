@@ -1,0 +1,8 @@
+.env
+.env.*
+.venv/
+.venv38/
+venv/
+__pycache__/
+*.py[cod]
+.git/

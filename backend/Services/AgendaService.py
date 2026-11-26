@@ -5,7 +5,7 @@ from Models.Agenda import Agenda
 class AgendaService:
     def list(self):
 
-        sql = "SELECT AGE_ID, AGE_UUID, AGE_FECHA, AGE_HORA, AGE_SER_ID, AGE_USU_ID, AGE_PAG_ID FROM T_AGENDA"
+        sql = "SELECT AGE_ID, AGE_UUID, AGE_FECHA, AGE_HORA, AGE_SER_ID, AGE_USU_ID, AGE_PAG_ID, AGE_DIRECCION, AGE_DESCRIPCION FROM T_AGENDA"
 
         c = current_app.mysql.connection.cursor()
         c.execute(sql)
@@ -23,7 +23,7 @@ class AgendaService:
                     u[3],
                     u[4],
                     u[5],
-                    u[6]
+                    u[6], u[7], u[8]
             )
 
             lista_l.append(objeto.to_dict())
@@ -35,7 +35,7 @@ class AgendaService:
 
     def getById(self, id):
 
-        sql = "SELECT AGE_ID, AGE_UUID, AGE_FECHA, AGE_HORA, AGE_SER_ID, AGE_USU_ID, AGE_PAG_ID FROM T_AGENDA WHERE AGE_ID = %s"
+        sql = "SELECT AGE_ID, AGE_UUID, AGE_FECHA, AGE_HORA, AGE_SER_ID, AGE_USU_ID, AGE_PAG_ID, AGE_DIRECCION, AGE_DESCRIPCION FROM T_AGENDA WHERE AGE_ID = %s"
 
         c = current_app.mysql.connection.cursor()
         c.execute(sql, (id,))
@@ -54,7 +54,7 @@ class AgendaService:
                 data[3],
                 data[4],
                 data[5],
-                data[6]
+                data[6], data[7], data[8]
         )
 
         return objeto.to_dict()
@@ -62,9 +62,9 @@ class AgendaService:
 
     def create(self, data):
 
-        sql = "INSERT INTO T_AGENDA (AGE_UUID, AGE_FECHA, AGE_HORA, AGE_SER_ID, AGE_USU_ID, AGE_PAG_ID) VALUES (%s, %s, %s, %s, %s, %s)"
+        sql = "INSERT INTO T_AGENDA (AGE_UUID, AGE_FECHA, AGE_HORA, AGE_SER_ID, AGE_USU_ID, AGE_PAG_ID, AGE_DIRECCION, AGE_DESCRIPCION) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
 
-        values = (data.get('uuid'), data.get('fecha'), data.get('hora'), data.get('ser_id'), data.get('usu_id'), data.get('pag_id'),)
+        values = (data.get('uuid'), data.get('fecha'), data.get('hora'), data.get('ser_id'), data.get('usu_id'), data.get('pag_id'), data.get('direccion'), data.get('descripcion'),)
 
         c = current_app.mysql.connection.cursor()
         c.execute(sql, values)
@@ -79,9 +79,9 @@ class AgendaService:
 
     def update(self, id, data):
 
-        sql = "UPDATE T_AGENDA SET AGE_UUID = %s, AGE_FECHA = %s, AGE_HORA = %s, AGE_SER_ID = %s, AGE_USU_ID = %s, AGE_PAG_ID = %s WHERE AGE_ID = %s"
+        sql = "UPDATE T_AGENDA SET AGE_UUID = %s, AGE_FECHA = %s, AGE_HORA = %s, AGE_SER_ID = %s, AGE_USU_ID = %s, AGE_PAG_ID = %s, AGE_DIRECCION = COALESCE(%s, AGE_DIRECCION), AGE_DESCRIPCION = COALESCE(%s, AGE_DESCRIPCION) WHERE AGE_ID = %s"
 
-        values = (data.get('uuid'), data.get('fecha'), data.get('hora'), data.get('ser_id'), data.get('usu_id'), data.get('pag_id'), id)
+        values = (data.get('uuid'), data.get('fecha'), data.get('hora'), data.get('ser_id'), data.get('usu_id'), data.get('pag_id'), data.get('direccion'), data.get('descripcion'), id)
 
         c = current_app.mysql.connection.cursor()
         c.execute(sql, values)

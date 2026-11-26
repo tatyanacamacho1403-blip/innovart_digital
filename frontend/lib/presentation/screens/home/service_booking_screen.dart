@@ -220,7 +220,8 @@ class _BookingSummaryScreenState extends State<_BookingSummaryScreen> {
       await ServiceController.instance.add(
         widget.catalogItem,
         widget.dateTime,
-        user,
+        address: widget.address,
+        description: widget.description,
       );
       if (!mounted) return;
       await Navigator.push<void>(
