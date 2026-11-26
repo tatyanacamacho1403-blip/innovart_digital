@@ -33,6 +33,8 @@ def protect_request():
         return "", 204
 
     path = request.path.rstrip("/") or "/"
+    if path == "/health":
+        return None
     if path == "/" or path.startswith("/static/") or path == "/api/documentacion" or path.startswith("/api/documentacion/"):
         return None
     if path == "/api/usuarios/login" and request.method == "POST":
