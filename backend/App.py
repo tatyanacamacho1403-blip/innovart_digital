@@ -32,6 +32,18 @@ def createApp():
     from Routes import loadRoutes
     loadRoutes(app)
 
+    @app.route("/health", methods=["GET"])
+    def health():
+        try:
+            cursor = mysql.connection.cursor()
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
+            cursor.close()
+            return jsonify({"status": "ok", "database": "connected"}), 200
+        except Exception:
+            app.logger.exception("Error verificando la conexión a MySQL")
+            return jsonify({"status": "error", "database": "disconnected"}), 503
+
     @app.route("/")
     def home():
         return {"mensaje": "API Innovart Digital funcionando"}, 200
